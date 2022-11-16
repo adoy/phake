@@ -64,7 +64,6 @@ class Facade
 
     public WeakMap $mockInfo;
 
-    public array $staticMockInfo = [];
     public WeakMap $constructorArgs;
 
     public function __construct(Mock\InfoRegistry $infoRegistry)
@@ -111,6 +110,11 @@ class Facade
             $defaultAnswer,
             $constructorArgs
         );
+    }
+
+    public function getInfo(string $mock): Mock\Info
+    {
+        return $this->infoRegistry->getInfo($mock);
     }
 
     public function resetStaticInfo(): void

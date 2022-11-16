@@ -160,8 +160,11 @@ class {$newClassName} {$extends}
 ";
 
         $this->loadClass($newClassName, $mockedClassName, $classDef);
-        $x = \Phake::getPhake()->staticMockInfo[$newClassName] = $this->createMockInfo($mockedClassName, new \Phake\CallRecorder\Recorder(), new \Phake\Stubber\StubMapper(), new \Phake\Stubber\Answers\NoAnswer());
-        $infoRegistry->addInfo($x);
+
+        $infoRegistry->addInfo(
+            $newClassName,
+            $this->createMockInfo($mockedClassName, new \Phake\CallRecorder\Recorder(), new \Phake\Stubber\StubMapper(), new \Phake\Stubber\Answers\NoAnswer())
+        );
     }
 
     /**

@@ -56,9 +56,14 @@ class InfoRegistry
      */
     private array $registry = [];
 
-    public function addInfo(Info $info): void
+    public function addInfo(string $name, Info $info): void
     {
-        $this->registry[] = $info;
+        $this->registry[$name] = $info;
+    }
+
+    public function getInfo(string $name): ?Info
+    {
+        return $this->registry[$name] ?? null;
     }
 
     public function resetAll(): void
