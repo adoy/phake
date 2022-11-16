@@ -80,6 +80,7 @@ class MockClass
         $implements = '';
         $interfaces = [];
         $parent = null;
+        $modifiers = '';
 
         /** @var array<class-string> $mockedClassNames */
         $mockedClassNames = (array) $mockedClassName;
@@ -94,7 +95,7 @@ class MockClass
             }
 
             if (PHP_VERSION_ID >= 80200 && $mockedClass->isReadOnly()) {
-                throw new \InvalidArgumentException('Readonly classes cannot be mocked.');
+                $modifiers = 'readonly';
             }
 
             if (!$mockedClass->isInterface()) {
@@ -141,7 +142,7 @@ class MockClass
 
         /** @var class-string $mockedClassName */
         $classDef = "
-class {$newClassName} {$extends}
+{$modifiers} class {$newClassName} {$extends}
 	implements \Phake\IMock {$implements}
 {
 	const __PHAKE_name = '{$mockedClassName}';

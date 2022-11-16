@@ -1042,13 +1042,10 @@ class MockClassTest extends TestCase
         if (PHP_VERSION_ID < 80200) {
             $this->markTestSkipped('Readonly classes are not supported in PHP versions prior to 8.2');
         }
-        $expectedException = new \InvalidArgumentException('Readonly classes cannot be mocked.');
 
-        try {
-            $mock = Phake::mock(\PhakeTest_ReadonlyClass::class);
-            $this->fail('Mocking a readonly class should throw an exception');
-        } catch (\InvalidArgumentException $actualException) {
-            $this->assertEquals($actualException, $expectedException);
-        }
+        $mock = Phake::mock(\PhakeTest_ReadonlyClass::class);
+
+        $this->assertInstanceOf(\PhakeTest_ReadonlyClass::class, $mock);
+        $this->assertInstanceOf(\Phake\IMock::class, $mock);
     }
 }
