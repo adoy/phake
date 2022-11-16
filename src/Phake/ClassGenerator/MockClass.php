@@ -192,6 +192,7 @@ class {$newClassName} {$extends}
      */
     public function instantiate(
         string $newClassName,
+        \Phake\Mock\InfoRegistry $infoRegistry,
         \Phake\CallRecorder\Recorder $recorder,
         \Phake\Stubber\StubMapper $mapper,
         \Phake\Stubber\IAnswer $defaultAnswer,
@@ -200,7 +201,7 @@ class {$newClassName} {$extends}
         $mockObject = $this->instantiator->instantiate($newClassName);
         assert($mockObject instanceof \Phake\IMock);
 
-        \Phake::getPhake()->mockInfo[$mockObject] = $this->createMockInfo($newClassName::__PHAKE_name, $recorder, $mapper, $defaultAnswer);
+        $infoRegistry->addInfo($mockObject, $this->createMockInfo($newClassName::__PHAKE_name, $recorder, $mapper, $defaultAnswer));
         \Phake::getPhake()->constructorArgs[$mockObject] = $constructorArgs;
 
         if (null !== $constructorArgs && method_exists($mockObject, '__construct')) {

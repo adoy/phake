@@ -46,6 +46,8 @@ declare(strict_types=1);
 
 namespace Phake\Mock;
 
+use WeakMap;
+
 /**
  * Stores all Info instances for static classes.
  */
@@ -54,22 +56,44 @@ class InfoRegistry
     /**
      * @var array<Info>
      */
-    private array $registry = [];
+    private array $staticRegistry = [];
 
-    public function addInfo(string $name, Info $info): void
+    private WeakMap $registry;
+
+    public function __construct()
     {
-        $this->registry[$name] = $info;
+        $this->registry = new WeakMap();
     }
 
-    public function getInfo(string $name): ?Info
+    /**
+     * @param \Phake\IMock|class-string $mock
+     */
+    public function addInfo(\Phake\IMock|string $mock, Info $info): void
     {
-        return $this->registry[$name] ?? null;
+        if ($mock instanceof \Phake\IMock) {
+            $this->registry[$mock] = $info;
+            return;
+        }
+
+        $this->staticRegistry[$mock] = $info;
+    }
+
+    /**
+     * @param \Phake\IMock|class-string $mock
+     */
+    public function getInfo(\Phake\IMock|string $mock): ?Info
+    {
+        if ($mock instanceof \Phake\IMock) {
+            return $this->registry[$mock] ?? null;
+        }
+
+        return $this->staticRegistry[$mock] ?? null;
     }
 
     public function resetAll(): void
     {
         /* @var $info Info */
-        foreach ($this->registry as $info) {
+        foreach ($this->staticRegistry as $info) {
             $info->resetInfo();
         }
     }

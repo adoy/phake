@@ -603,9 +603,6 @@ class Phake
     public static function getInfo(Phake\IMock|string $mock): Phake\Mock\Info
     {
         static::assertValidMock($mock);
-        if ($mock instanceof Phake\IMock) {
-            return self::getPhake()->mockInfo[$mock];
-        }
 
         return self::getPhake()->getInfo($mock);
     }
