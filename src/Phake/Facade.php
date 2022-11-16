@@ -46,8 +46,6 @@ declare(strict_types=1);
 
 namespace Phake;
 
-use WeakMap;
-
 /**
  * A facade class providing functionality to interact with the Phake framework.
  *
@@ -62,12 +60,9 @@ class Facade
 
     private Mock\InfoRegistry $infoRegistry;
 
-    public WeakMap $mockInfo;
-
     public function __construct(Mock\InfoRegistry $infoRegistry)
     {
         $this->infoRegistry = $infoRegistry;
-        $this->mockInfo = new WeakMap();
     }
 
     /**
