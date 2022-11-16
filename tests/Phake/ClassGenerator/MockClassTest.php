@@ -641,7 +641,7 @@ class MockClassTest extends TestCase
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
         /* @var $info Phake\Mock\Info */
-        $info = $newClassName::$__PHAKE_staticInfo;
+        $info = Phake::getPhake()->staticMockInfo[$newClassName];
         $this->assertInstanceOf(Phake\Mock\Info::class, $info);
 
         $this->assertInstanceOf(Phake\Stubber\IAnswer::class, $info->getDefaultAnswer());
@@ -657,7 +657,9 @@ class MockClassTest extends TestCase
         $mockedClass  = \stdClass::class;
         $this->classGen->generate($newClassName, $mockedClass, $this->infoRegistry);
 
-        Phake::verify($this->infoRegistry)->addInfo($newClassName::$__PHAKE_staticInfo);
+        $staticInfo = Phake::getPhake()->staticMockInfo[$newClassName];
+
+        Phake::verify($this->infoRegistry)->addInfo($staticInfo);
     }
 
     /**

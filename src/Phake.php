@@ -604,14 +604,10 @@ class Phake
     {
         static::assertValidMock($mock);
         if ($mock instanceof Phake\IMock) {
-            assert(isset($mock->__PHAKE_info));
-
-            return $mock->__PHAKE_info;
+            return self::getPhake()->mockInfo[$mock];
         }
 
-        assert(isset($mock::$__PHAKE_staticInfo));
-
-        return $mock::$__PHAKE_staticInfo;
+        return self::getPhake()->staticMockInfo[$mock];
     }
 
     /**
