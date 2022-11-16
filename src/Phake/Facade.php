@@ -64,13 +64,10 @@ class Facade
 
     public WeakMap $mockInfo;
 
-    public WeakMap $constructorArgs;
-
     public function __construct(Mock\InfoRegistry $infoRegistry)
     {
         $this->infoRegistry = $infoRegistry;
         $this->mockInfo = new WeakMap();
-        $this->constructorArgs = new WeakMap();
     }
 
     /**

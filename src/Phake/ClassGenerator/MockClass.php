@@ -146,8 +146,6 @@ class {$newClassName} {$extends}
 {
 	const __PHAKE_name = '{$mockedClassName}';
 
-	public \$__PHAKE_constructorArgs;
-
 	/**
 	 * @return void
 	 */
@@ -202,7 +200,6 @@ class {$newClassName} {$extends}
         assert($mockObject instanceof \Phake\IMock);
 
         $infoRegistry->addInfo($mockObject, $this->createMockInfo($newClassName::__PHAKE_name, $recorder, $mapper, $defaultAnswer));
-        \Phake::getPhake()->constructorArgs[$mockObject] = $constructorArgs;
 
         if (null !== $constructorArgs && method_exists($mockObject, '__construct')) {
             call_user_func_array([$mockObject, '__construct'], $constructorArgs);
@@ -298,7 +295,7 @@ class {$newClassName} {$extends}
         }
         if ($overrideConstructor && !empty($realClass)) {
             return "
-	public function __construct()
+	public function __construct(...\$params)
 	{
 	    {$this->getConstructorChaining($realClass)}
 	}
@@ -314,12 +311,7 @@ class {$newClassName} {$extends}
     protected function getConstructorChaining(\ReflectionClass $originalClass): string
     {
         return $originalClass->hasMethod('__construct') ? "
-
-		if (isset(\Phake::getPhake()->constructorArgs[\$this]))
-		{
-			call_user_func_array([parent::class, '__construct'], \Phake::getPhake()->constructorArgs[\$this]);
-            unset(\Phake::getPhake()->constructorArgs[\$this]);
-		}
+        parent::__construct(...\$params);
 		" : '';
     }
 
