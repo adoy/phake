@@ -187,7 +187,9 @@ class MockClass
     /**
      * Instantiates a new instance of the given mocked class, and configures Phake data structures on said object.
      *
-     * @param class-string $newClassName
+     * @template T of object
+     * @param class-string<T> $newClassName
+     * @return \Phake\IMock&T
      */
     public function instantiate(
         string $newClassName,
@@ -256,7 +258,6 @@ class MockClass
         }
 
         foreach ($reflectionClass->getInterfaces() as $interface) {
-            assert($interface instanceof \ReflectionClass);
             if (null !== $interface->getConstructor() || $interface->hasMethod('__construct')) {
                 return true;
             }
@@ -485,6 +486,7 @@ class MockClass
 
         try {
             if ($parameter->hasType()) {
+                /** @psalm-suppress PossiblyNullArgument */
                 $type = $this->reflectionTypeToString($parameter->getType(), $parameter->getDeclaringClass()) . ' ';
             }
         } catch (\ReflectionException $e) {

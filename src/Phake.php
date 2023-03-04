@@ -78,7 +78,7 @@ class Phake
     /**
      * Returns a new mock object based on the given class name.
      *
-     * @phpstan-template T of object
+     * @template T of object
      *
      * @param class-string<T>|array<class-string<T>> $className
      * @param Phake\Stubber\IAnswerContainer|null   $defaultAnswer
@@ -109,7 +109,7 @@ class Phake
      *
      * Calls to this class will be recorded however they will still call the original functionality by default.
      *
-     * @phpstan-template T of object
+     * @template T of object
      * @param class-string<T>|array<class-string<T>> $className class name
      * @param mixed ...$args the remaining arguments will be passed as constructor arguments
      * @return Phake\IMock&T
@@ -349,8 +349,6 @@ class Phake
     }
 
     /**
-     * @psalm-suppress NullableReturnStatement
-     * @psalm-suppress InvalidNullableReturnType
      */
     public static function getPhake(): Phake\Facade
     {
@@ -408,7 +406,6 @@ class Phake
     /**
      * Allows verifying an exact number of invocations.
      *
-     * @psalm-suppress RedundantCastGivenDocblockType
      */
     public static function times(int $count): Phake\CallRecorder\IVerifierMode
     {
@@ -426,7 +423,6 @@ class Phake
     /**
      * Allows verifying at least <code>$count</code> invocations.
      *
-     * @psalm-suppress RedundantCastGivenDocblockType
      */
     public static function atLeast(int $count): Phake\CallRecorder\IVerifierMode
     {
@@ -436,7 +432,6 @@ class Phake
     /**
      * Allows verifying at most <code>$count</code> invocations.
      *
-     * @psalm-suppress RedundantCastGivenDocblockType
      */
     public static function atMost(int $count): Phake\CallRecorder\IVerifierMode
     {
@@ -511,8 +506,6 @@ class Phake
     }
 
     /**
-     * @psalm-suppress NullableReturnStatement
-     * @psalm-suppress InvalidNullableReturnType
      */
     public static function getMockLoader(): Phake\ClassGenerator\ILoader
     {
@@ -530,8 +523,6 @@ class Phake
     }
 
     /**
-     * @psalm-suppress NullableReturnStatement
-     * @psalm-suppress InvalidNullableReturnType
      */
     public static function getMockInstantiator(): Phake\ClassGenerator\IInstantiator
     {
@@ -593,8 +584,6 @@ class Phake
     /**
      * Used internally to standardize pulling mock names.
      *
-     * @psalm-suppress NoInterfaceProperties
-     * @psalm-suppress InvalidPropertyFetch
      *
      * @internal
      * @param Phake\IMock|class-string $mock
