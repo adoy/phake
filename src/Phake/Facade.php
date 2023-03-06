@@ -82,7 +82,7 @@ class Facade
         $mockedClassList = (array) $mockedClassList;
 
         foreach ($mockedClassList as $mockedClass) {
-            if (!class_exists($mockedClass, true) && !interface_exists($mockedClass, true)) {
+            if (!class_exists($mockedClass, true) && !interface_exists($mockedClass, true) && !trait_exists($mockedClass, true)) {
                 throw new \InvalidArgumentException("The class / interface [{$mockedClass}] does not exist. Check the spelling and make sure it is loadable.");
             }
         }

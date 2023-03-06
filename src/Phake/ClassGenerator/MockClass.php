@@ -77,8 +77,10 @@ class MockClass
     public function generate(string $newClassName, string|array $mockedClassName, \Phake\Mock\InfoRegistry $infoRegistry): void
     {
         $extends    = '';
+        $use        = '';
         $implements = '';
         $interfaces = [];
+        $traits     = [];
         $parent = null;
         $modifiers = '';
 
@@ -98,7 +100,9 @@ class MockClass
                 $modifiers = 'readonly';
             }
 
-            if (!$mockedClass->isInterface()) {
+            if ($mockedClass->isTrait()) {
+                $traits[] = $mockedClass;
+            } elseif (!$mockedClass->isInterface()) {
                 if (!empty($parent)) {
                     throw new \RuntimeException("You cannot use two classes in the same mock: {$parent->getName()}, {$mockedClass->getName()}. Use interfaces instead.");
                 }
@@ -134,10 +138,23 @@ class MockClass
             $implements = ', ' . implode(',', $interfaceNames);
         }
 
-        if (empty($parent)) {
+        if (!empty($traits)) {
+            foreach ($traits as $trait) {
+                $use .= "use {$trait->getName()} {" . PHP_EOL;
+                $filter     = \ReflectionMethod::IS_ABSTRACT | \ReflectionMethod::IS_PROTECTED | \ReflectionMethod::IS_PUBLIC | \ReflectionMethod::IS_PRIVATE;
+                foreach ($trait->getMethods($filter) as $method) {
+                    $use .= $method->getName()  . ' as __PHAKE_' . $method->getName() . ';'. PHP_EOL;
+                }
+                $use .= "}" . PHP_EOL;
+            }
+        }
+
+        if ($parent) {
+            $mockedClass = $parent;
+        } elseif (!empty($interfaces)) {
             $mockedClass = array_shift($interfaces);
         } else {
-            $mockedClass = $parent;
+            $mockedClass = array_shift($traits);
         }
 
         /** @var class-string $mockedClassName */
@@ -145,6 +162,7 @@ class MockClass
 {$modifiers} class {$newClassName} {$extends}
 	implements \Phake\IMock {$implements}
 {
+    {$use}
 	const __PHAKE_name = '{$mockedClassName}';
 
 	/**
@@ -219,6 +237,9 @@ class MockClass
     {
         $methodDefs = '';
         $filter     = \ReflectionMethod::IS_ABSTRACT | \ReflectionMethod::IS_PROTECTED | \ReflectionMethod::IS_PUBLIC;
+        if ($mockedClass->isTrait()) {
+            $filter |= \ReflectionMethod::IS_PRIVATE;
+        }
 
         foreach ($mockedClass->getMethods($filter) as $method) {
             $methodName = $method->getName();

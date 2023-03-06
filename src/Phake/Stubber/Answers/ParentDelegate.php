@@ -76,6 +76,9 @@ class ParentDelegate implements \Phake\Stubber\IAnswer
             $reflParent = $reflClass->getParentClass();
 
             if (!is_object($reflParent)) {
+                if ($reflMethod = $reflClass->getMethod('__PHAKE_' . $method)) {
+                    return new ParentDelegateCallback($context, $reflMethod);
+                }
                 return $fallback;
             }
 
