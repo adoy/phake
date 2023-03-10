@@ -198,12 +198,12 @@ class Phake
     /**
      * Allows verification of methods in a particular order
      */
-    public static function inOrder(array ...$calls): void
+    public static function inOrder(Phake\CallRecorder\CallInfoCollection ...$calls): void
     {
         $orderVerifier = new Phake\CallRecorder\OrderVerifier();
 
         if (!$orderVerifier->verifyCallsInOrder(self::pullPositionsFromCallInfos($calls))) {
-            $result = new Phake\CallRecorder\VerifierResult(false, [], 'Calls not made in order');
+            $result = new Phake\CallRecorder\VerifierResult(false, new Phake\CallRecorder\CallInfoCollection, 'Calls not made in order');
             self::getClient()->processVerifierResult($result);
         }
     }
@@ -256,6 +256,8 @@ class Phake
 
     /**
      * Converts a bunch of call info objects to position objects.
+     *
+     * @param Phake\CallRecorder\CallInfoCollection[] $calls
      */
     private static function pullPositionsFromCallInfos(array $calls): array
     {

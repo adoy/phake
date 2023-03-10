@@ -66,7 +66,7 @@ class TimesTest extends TestCase
     public function testVerifyMatches(): void
     {
         // Will throw an exception if it wasn't working
-        $matchedCalls = ['1item'];
+        $matchedCalls = new \Phake\CallRecorder\CallInfoCollection(['1item']);
         $this->assertTrue($this->verifierModeTimes->verify($matchedCalls)->getVerified());
     }
 
@@ -75,7 +75,7 @@ class TimesTest extends TestCase
      */
     public function testVerifyFailsOnOver(): void
     {
-        $matchedCalls = ['1item', '2items'];
+        $matchedCalls = new \Phake\CallRecorder\CallInfoCollection(['1item', '2items']);
         $result       = $this->verifierModeTimes->verify($matchedCalls);
         $this->assertFalse($result->getVerified());
         $this->assertEquals('actually called <2> times', $result->getFailureDescription());
@@ -86,7 +86,7 @@ class TimesTest extends TestCase
      */
     public function testVerifyFailsOnUnder(): void
     {
-        $matchedCalls = [];
+        $matchedCalls = new \Phake\CallRecorder\CallInfoCollection();
         $result       = $this->verifierModeTimes->verify($matchedCalls);
         $this->assertFalse($result->getVerified());
         $this->assertEquals('actually called <0> times', $result->getFailureDescription());

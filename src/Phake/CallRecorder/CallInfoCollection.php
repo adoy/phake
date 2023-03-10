@@ -2,7 +2,7 @@
 /*
  * Phake - Mocking Framework
  *
- * Copyright (c) 2010-2022, Mike Lively <mike.lively@sellingsource.com>
+ * Copyright (c) 2010-2022, Mike Lively <m@digitalsandwich.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,38 +44,39 @@
 
 declare(strict_types=1);
 
-namespace Phake\Client;
-
-use PHPUnit\Framework\Assert;
+namespace Phake\CallRecorder;
 
 /**
- * The client adapter used for PHPUnit.
- *
- * This adapter allows PHPUnit to report failed verify() calls as test failures instead of errors. It also counts
- * verify() calls as assertions.
+ * @author Pierrick Charron <pierrick@adoy.net>
+ * @template-implements \IteratorAggregate<CallInfo>
  */
-class PHPUnit8 implements IClient
+class CallInfoCollection implements \Countable, \IteratorAggregate
 {
     /**
-     * {@inheritDoc}
+     * @var array<int, CallInfo>
      */
-    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result): \Phake\CallRecorder\CallInfoCollection
-    {
-        Assert::assertThat($result, $this->getConstraint());
-
-        return $result->getMatchedCalls();
-    }
+    private array $callInfo = [];
 
     /**
-     * {@inheritDoc}
+     * @param array<int, CallInfo> $callInfo
      */
-    public function processObjectFreeze(): void
+    public function __construct(array $callInfo = [])
     {
-        Assert::assertThat(true, Assert::isTrue());
+        $this->callInfo = $callInfo;
     }
 
-    private function getConstraint(): \Phake\PHPUnit\VerifierResultConstraintV6
+    public function add(CallInfo $callInfo): void
     {
-        return new \Phake\PHPUnit\VerifierResultConstraintV6();
+        $this->callInfo[] = $callInfo;
+    }
+
+    public function count(): int
+    {
+        return count($this->callInfo);
+    }
+
+    public function getIterator(): \Iterator
+    {
+        yield from $this->callInfo;
     }
 }

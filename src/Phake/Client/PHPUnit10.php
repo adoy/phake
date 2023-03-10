@@ -59,7 +59,7 @@ class PHPUnit10 implements IClient
     /**
      * {@inheritDoc}
      */
-    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result): array
+    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result): \Phake\CallRecorder\CallInfoCollection
     {
         Assert::assertThat($result, $this->getConstraint());
 

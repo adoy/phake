@@ -54,10 +54,8 @@ interface IClient
     /**
      * Handles the processing of a verifier result. When the verifier is true it should return the matched calls.
      * The behavior for if the verifier is false is up to the client.
-     *
-     * @return array<int, \Phake\CallRecorder\CallInfo>
      */
-    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result): array;
+    public function processVerifierResult(\Phake\CallRecorder\VerifierResult $result): \Phake\CallRecorder\CallInfoCollection;
 
     /**
      * Used to notify the client that a mock has been frozen.

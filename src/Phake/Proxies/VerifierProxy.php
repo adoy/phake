@@ -68,10 +68,8 @@ class VerifierProxy
 
     /**
      * A call magic method to provide a more fluent interface to the verifier.
-     *
-     * @return array<int, \Phake\CallRecorder\CallInfo>
      */
-    public function __call(string $method, array $arguments): array
+    public function __call(string $method, array $arguments): \Phake\CallRecorder\CallInfoCollection
     {
         $arguments = $this->resolveNamedArguments($this->verifier->getObject(), $method, $arguments);
         $expectation = new \Phake\CallRecorder\CallExpectation(
@@ -89,10 +87,9 @@ class VerifierProxy
     /**
      * A magic call to verify a call with any parameters.
      *
-     * @return array<int, \Phake\CallRecorder\CallInfo>
      * @throws \InvalidArgumentException if $method is not a valid parameter/method name
      */
-    public function __get(string|object $method): array
+    public function __get(string|object $method): \Phake\CallRecorder\CallInfoCollection
     {
         $obj = $this->verifier->getObject();
 

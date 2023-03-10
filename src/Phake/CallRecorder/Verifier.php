@@ -77,7 +77,7 @@ class Verifier
         $matcher = new \Phake\Matchers\MethodMatcher($expectation->getMethod(), $expectation->getArgumentMatcher());
         $calls   = $this->recorder->getAllCalls();
 
-        $matchedCalls     = [];
+        $matchedCalls     = new CallInfoCollection();
         $methodNonMatched = [];
         $obj_interactions = false;
         foreach ($calls as $call) {
@@ -89,7 +89,7 @@ class Verifier
                     $matcher->assertMatches($call->getMethod(), $args);
                     $callInfo = $this->recorder->getCallInfo($call);
                     assert($callInfo instanceof CallInfo);
-                    $matchedCalls[] = $callInfo;
+                    $matchedCalls->add($callInfo);
                     $this->recorder->markCallVerified($call);
                 } catch (\Phake\Exception\MethodMatcherException $e) {
                     if ($call->getMethod() == $expectation->getMethod()) {
@@ -116,7 +116,7 @@ class Verifier
 
             return new VerifierResult(
                 false,
-                [],
+                new CallInfoCollection(),
                 $expectation->__toString() . ', ' . $verifierModeResult->getFailureDescription() . '.' . $additions
             );
         }
@@ -135,12 +135,12 @@ class Verifier
         }
 
         if ($result) {
-            return new VerifierResult(true, []);
+            return new VerifierResult(true, new CallInfoCollection());
         }
         $desc = 'Expected no interaction with mock' . "\n"
                 . 'Invocations:' . "\n  ";
 
-        return new VerifierResult(false, [], $desc . implode("\n  ", $reportedCalls));
+        return new VerifierResult(false, new CallInfoCollection(), $desc . implode("\n  ", $reportedCalls));
     }
 
     /**
@@ -157,12 +157,12 @@ class Verifier
         }
 
         if ($result) {
-            return new VerifierResult(true, []);
+            return new VerifierResult(true, new CallInfoCollection());
         }
         $desc = 'Expected no interaction with mock' . "\n"
                 . 'Invocations:' . "\n  ";
 
-        return new VerifierResult(false, [], $desc . implode("\n  ", $reportedCalls));
+        return new VerifierResult(false, new CallInfoCollection(), $desc . implode("\n  ", $reportedCalls));
     }
 
     /**

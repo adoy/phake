@@ -65,7 +65,7 @@ class CallVerifierProxy
     /**
      * Verifies that the call to __call was made on the given object with the parameters passed into the constructor
      */
-    public function isCalledOn(\Phake\IMock $obj, ?\Phake\CallRecorder\IVerifierMode $verifierMode = null): array
+    public function isCalledOn(\Phake\IMock $obj, ?\Phake\CallRecorder\IVerifierMode $verifierMode = null): \Phake\CallRecorder\CallInfoCollection
     {
         if (null === $verifierMode) {
             $verifierMode = new \Phake\CallRecorder\VerifierMode\Times(1);

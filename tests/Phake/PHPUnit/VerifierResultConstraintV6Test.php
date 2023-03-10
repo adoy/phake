@@ -70,13 +70,13 @@ class VerifierResultConstraintV6Test extends TestCase
 
     public function testEvaluateReturnsTrueIfVerifyResultIsTrue(): void
     {
-        $result = new Phake\CallRecorder\VerifierResult(true, []);
+        $result = new Phake\CallRecorder\VerifierResult(true, new \Phake\CallRecorder\CallInfoCollection());
         $this->assertTrue($this->constraint->evaluate($result, '', true));
     }
 
     public function testEvaluateReturnsFalseWhenVerifierReturnsFalse(): void
     {
-        $result = new Phake\CallRecorder\VerifierResult(false, []);
+        $result = new Phake\CallRecorder\VerifierResult(false, new \Phake\CallRecorder\CallInfoCollection());
         $this->assertFalse($this->constraint->evaluate($result, '', true));
     }
 
@@ -94,7 +94,7 @@ class VerifierResultConstraintV6Test extends TestCase
 
     public function testCustomFailureDescriptionReturnsDescriptionFromResult(): void
     {
-        $result = new Phake\CallRecorder\VerifierResult(false, [], 'The call failed!');
+        $result = new Phake\CallRecorder\VerifierResult(false, new \Phake\CallRecorder\CallInfoCollection(), 'The call failed!');
 
         try {
             $this->constraint->evaluate($result, '');

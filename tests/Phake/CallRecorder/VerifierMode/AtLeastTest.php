@@ -66,7 +66,7 @@ class AtLeastTest extends TestCase
     public function testVerifyMatches(): void
     {
         // Will throw an exception if it wasn't working
-        $matchedCalls = ['1item'];
+        $matchedCalls = new \Phake\CallRecorder\CallInfoCollection(['1item']);
         $this->assertTrue($this->verifierModeAtLeast->verify($matchedCalls)->getVerified());
     }
 
@@ -75,7 +75,7 @@ class AtLeastTest extends TestCase
      */
     public function testVerifyOver(): void
     {
-        $matchedCalls = ['1item', '2items'];
+        $matchedCalls = new \Phake\CallRecorder\CallInfoCollection(['1item', '2items']);
         $this->assertTrue($this->verifierModeAtLeast->verify($matchedCalls)->getVerified());
     }
 
@@ -84,7 +84,7 @@ class AtLeastTest extends TestCase
      */
     public function testVerifyUnder(): void
     {
-        $matchedCalls = [];
+        $matchedCalls = new \Phake\CallRecorder\CallInfoCollection([]);
         $result       = $this->verifierModeAtLeast->verify($matchedCalls);
         $this->assertFalse($result->getVerified());
         $this->assertEquals('actually called <0> times', $result->getFailureDescription());

@@ -56,5 +56,5 @@ interface IVerifierMode extends \Stringable
     /**
      * Verifies that the number of <code>$matchedCalls</code> matches the number of invocations expected.
      */
-    public function verify(array $matchedCalls): VerifierMode\Result;
+    public function verify(CallInfoCollection $matchedCalls): VerifierMode\Result;
 }

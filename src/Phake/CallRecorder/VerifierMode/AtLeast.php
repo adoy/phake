@@ -66,7 +66,7 @@ class AtLeast implements \Phake\CallRecorder\IVerifierMode
      * Verifies that the number of <code>$matchedCalls</code> is equal to or greater than the
      * value this object was instantiated with.
      */
-    public function verify(array $matchedCalls): Result
+    public function verify(\Phake\CallRecorder\CallInfoCollection $matchedCalls): Result
     {
         $calledTimes = count($matchedCalls);
         if ($calledTimes >= $this->times) {

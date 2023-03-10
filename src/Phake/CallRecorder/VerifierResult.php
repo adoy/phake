@@ -53,17 +53,11 @@ class VerifierResult
 {
     private bool $verified;
 
-    /**
-     * @var array<int, CallInfo>
-     */
-    private array $matchedCalls;
+    private CallInfoCollection $matchedCalls;
 
     private string $failureDescription;
 
-    /**
-     * @param array<int, CallInfo>  $matchedCalls
-     */
-    public function __construct(bool $verified, array $matchedCalls, string $failureDescription = '')
+    public function __construct(bool $verified, CallInfoCollection $matchedCalls, string $failureDescription = '')
     {
         $this->verified           = $verified;
         $this->matchedCalls       = $matchedCalls;
@@ -75,10 +69,7 @@ class VerifierResult
         return $this->verified;
     }
 
-    /**
-     * @return array<int, CallInfo>
-     */
-    public function getMatchedCalls(): array
+    public function getMatchedCalls(): CallInfoCollection
     {
         return $this->matchedCalls;
     }
