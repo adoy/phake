@@ -202,7 +202,7 @@ class Phake
     {
         $orderVerifier = new Phake\CallRecorder\OrderVerifier();
 
-        if (!$orderVerifier->verifyCallsInOrder(self::pullPositionsFromCallInfos($calls))) {
+        if (!$orderVerifier->verifyCallsInOrder($calls)) {
             $result = new Phake\CallRecorder\VerifierResult(false, new Phake\CallRecorder\CallInfoCollection, 'Calls not made in order');
             self::getClient()->processVerifierResult($result);
         }
@@ -252,25 +252,6 @@ class Phake
             $sVerifier = new Phake\CallRecorder\Verifier($sCallRecorder, get_class($mock));
             self::getClient()->processVerifierResult($sVerifier->verifyNoOtherCalls());
         }
-    }
-
-    /**
-     * Converts a bunch of call info objects to position objects.
-     *
-     * @param Phake\CallRecorder\CallInfoCollection[] $calls
-     */
-    private static function pullPositionsFromCallInfos(array $calls): array
-    {
-        $transformed = [];
-        foreach ($calls as $callList) {
-            $transformedList = [];
-            foreach ($callList as $call) {
-                $transformedList[] = $call->getPosition();
-            }
-            $transformed[] = $transformedList;
-        }
-
-        return $transformed;
     }
 
     /**

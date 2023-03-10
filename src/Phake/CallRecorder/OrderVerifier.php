@@ -51,8 +51,29 @@ namespace Phake\CallRecorder;
  */
 class OrderVerifier
 {
+    /**
+     * Converts a bunch of call info objects to position objects.
+     *
+     * @param Phake\CallRecorder\CallInfoCollection[] $calls
+     */
+    private static function pullPositionsFromCallInfos(array $calls): array
+    {
+        $transformed = [];
+        foreach ($calls as $callList) {
+            $transformedList = [];
+            foreach ($callList as $call) {
+                $transformedList[] = $call->getPosition();
+            }
+            $transformed[] = $transformedList;
+        }
+
+        return $transformed;
+    }
+
     public function verifyCallsInOrder(array $calls): bool
     {
+        $calls = $this->pullPositionsFromCallInfos($calls);
+
         $call1 = array_shift($calls);
         $call2 = array_shift($call1);
 

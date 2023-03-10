@@ -68,9 +68,9 @@ class OrderVerifierTest extends TestCase
      */
     public function testInOrderValidation(): void
     {
-        $position1 = [new Position(1)];
-        $position2 = [new Position(2)];
-        $position3 = [new Position(3)];
+        $position1 = $this->callInfoCollectionWithPositions(1);
+        $position2 = $this->callInfoCollectionWithPositions(2);
+        $position3 = $this->callInfoCollectionWithPositions(3);
 
         $this->assertTrue($this->verifier->verifyCallsInOrder([$position1, $position2, $position3]));
     }
@@ -80,9 +80,9 @@ class OrderVerifierTest extends TestCase
      */
     public function testOutOfOrderValidation(): void
     {
-        $position1 = [new Position(1)];
-        $position2 = [new Position(3)];
-        $position3 = [new Position(2)];
+        $position1 = $this->callInfoCollectionWithPositions(1);
+        $position2 = $this->callInfoCollectionWithPositions(3);
+        $position3 = $this->callInfoCollectionWithPositions(2);
 
         $this->assertFalse($this->verifier->verifyCallsInOrder([$position1, $position2, $position3]));
     }
@@ -92,10 +92,21 @@ class OrderVerifierTest extends TestCase
      */
     public function testOutOfOrderValidationWithMultipleCalls(): void
     {
-        $position1 = [new Position(1)];
-        $position2 = [new Position(3)];
-        $position3 = [new Position(2), new Position(4)];
+        $position1 = $this->callInfoCollectionWithPositions(1);
+        $position2 = $this->callInfoCollectionWithPositions(3);
+        $position3 = $this->callInfoCollectionWithPositions(2, 4);
 
         $this->assertTrue($this->verifier->verifyCallsInOrder([$position1, $position2, $position3]));
+    }
+
+    private function callInfoCollectionWithPositions(int ...$positions): CallInfoCollection
+    {
+        $collection = new CallInfoCollection();
+
+        foreach ($positions as $position) {
+            $collection->add(new CallInfo(\Phake::mock(Call::class), new Position($position)));
+        }
+
+        return $collection;
     }
 }
